@@ -6,6 +6,7 @@ version: 2.1
 orbs:
   # use Cypress orb from CircleCI registry
   cypress: cypress-io/cypress@1.8.0
+working_directory: ~/repo
 jobs:
   build:
     docker:
@@ -45,8 +46,6 @@ workflows:
       # split into install + test jobs when Mac caching is correct
       # https://github.com/cypress-io/circleci-orb/issues/98
       - cypress/run:
-          steps: #*csteps
-            - checkout # special step to check out source code to working directory
           working_directory: ~/repo
           name: E2E
           command: npm run cy:run-ci

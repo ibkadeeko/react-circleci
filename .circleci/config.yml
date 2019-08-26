@@ -17,7 +17,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    # working_directory: ~/react-circleci
+    working_directory: ~/repo
 
     steps:
       - checkout
@@ -45,10 +45,13 @@ workflows:
       # split into install + test jobs when Mac caching is correct
       # https://github.com/cypress-io/circleci-orb/issues/98
       - cypress/run:
-          # working_directory: ~/repo
+          steps: #*csteps
+            - checkout # special step to check out source code to working directory
+          working_directory: ~/repo
           name: E2E
           command: npm run cy:run-ci
           record: true
           parallel: true
           parallelism: 2
           group: 2 machines
+

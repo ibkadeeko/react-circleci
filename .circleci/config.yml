@@ -3,9 +3,6 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2.1
-orbs:
-  # use Cypress orb from CircleCI registry
-  cypress: cypress-io/cypress@1.8.0
 working_directory: ~/repo
 jobs:
   build:
@@ -39,18 +36,4 @@ jobs:
 
       # run tests!
       - run: npm test
-
-workflows:
-  build:
-    jobs:
-      # split into install + test jobs when Mac caching is correct
-      # https://github.com/cypress-io/circleci-orb/issues/98
-      - cypress/run:
-          working_directory: ~/repo
-          name: E2E
-          command: npm run cy:run-ci
-          record: true
-          parallel: true
-          parallelism: 2
-          group: 2 machines
 

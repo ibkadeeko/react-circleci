@@ -48,7 +48,6 @@ workflows:
           name: E2E
           command: 'npm run cy:run-ci'
           record: true
-          record: true
           parallel: true
           parallelism: 2
           group: 2 machines

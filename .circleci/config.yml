@@ -45,7 +45,7 @@ workflows:
       # split into install + test jobs when Mac caching is correct
       # https://github.com/cypress-io/circleci-orb/issues/98
       - cypress/run:
-          name: End to end test
+          name: E2E
           command: 'npm run cy:run-ci'
           record: true
           record: true

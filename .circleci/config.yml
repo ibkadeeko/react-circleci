@@ -3,6 +3,9 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
+orbs:
+  # use Cypress orb from CircleCI registry
+  cypress: cypress-io/cypress@1.8.0
 jobs:
   build:
     docker:
@@ -35,3 +38,13 @@ jobs:
 
       # run tests!
       - run: npm test
+
+workflows:
+  E2E:
+    jobs:
+      # split into install + test jobs when Mac caching is correct
+      # https://github.com/cypress-io/circleci-orb/issues/98
+      - cypress/run:
+          name: End to end test
+          start: 'npm run cy:run-ci'
+          record: true

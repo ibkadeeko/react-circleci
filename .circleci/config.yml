@@ -17,7 +17,6 @@ jobs:
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
-
     working_directory: ~/repo
     steps:
       - checkout
@@ -38,20 +37,30 @@ jobs:
 
       # run tests!
       - run: npm test
+  cypress/run:
+    docker:
+    - image: cypress/base:10
+    parallelism: 1
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+        - cache-{{ .Branch }}-{{ checksum "package.json" }}
+    - save_cache:
+        key: cache-{{ .Branch }}-{{ checksum "package.json" }}
+        paths:
+        - ~/.npm
+        - ~/.cache
+    - attach_workspace:
+        at: ~/
+    - run:
+        name: Run Cypress tests
+        command: npm run cy:run-ci
 
 workflows:
   build:
     jobs:
       # split into install + test jobs when Mac caching is correct
       # https://github.com/cypress-io/circleci-orb/issues/98
-      - cypress/run:
-          requires:
-            - checkout
-          working_directory: ~/repo
-          name: E2E
-          command: npm run cy:run-ci
-          record: true
-          parallel: true
-          parallelism: 2
-          group: 2 machines
+      - cypress/run
 
